@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# duration=day
+# duration=fortnite
+# region=origin
+region=globe
+
+# 1/1/93 .. 12/31/93
+# 122736 .. 131472
+
+# fortnite
+dt=336
+dtm1=335
+
+# day
+dt=24
+dtm1=23
+
+# for s in `seq 122736 ${dt} 131472`; do 
+# 00 for s in `seq 122736 ${dt} 122737`; do 
+# 01 for s in `seq 122760 ${dt} 122856`; do
+# 02 for s in `seq 122880 ${dt} 124200`; do
+for s in `seq 124224 ${dt} 131472`; do
+
+echo working on  t= ${s}, date = `/home/mrilee/src/PerformanceComparison/2018-0928-DataLoading-1/idx_to_date.py ${s}`
+
+# if [ ${duration} == "fortnite" ]; then
+#     # # 1993 1 1
+#     # t0=122736
+#     # # dt=14*24-1
+#     # dt=335
+#     # t1=122736+${dt}
+#     t0=${s}
+#     t1=${s}+${dtm1}
+# fi
+
+t0=${s}
+t1=${s}+${dtm1}
+
+
+if [ ${region} == "origin" ]; then
+z0=0
+z1=0
+y0=0
+y1=0
+x0=0
+x1=0
+elif [ ${region} == "globe" ]; then
+z0=0
+z1=0
+y0=0
+y1=360
+x0=0
+x1=575
+fi
+
+# z0=
+# z1=
+# y0=
+# y1=
+# x0=
+# x1=
+
+fname=/home/mrilee/nobackup/tmp/others/ccl-inputs-${region}-${t0}+${dtm1}.csv
+
+# EXE=echo
+EXE=time
+
+${EXE} iquery -naq "
+save(
+	cross_join 
+                     (
+                        join 
+                        ( 
+                            project 
+                            (
+			    between(
+                               M2T1NXFLX
+			       ,${t0},${z0},${y0},${x0},${t1},${z1},${y1},${x1})
+			       , precsno, prectot
+                            ),
+                            project 
+                            (
+			    between(
+                               M2T1NXSLV
+			       ,${t0},${z0},${y0},${x0},${t1},${z1},${y1},${x1})
+			       , u10m, v10m, u2m, v2m
+                            )
+                        ) as A,
+                        redimension 
+                        ( 
+                           M2C0NXASM, 
+                           <frland:float null, frlandice:float null>[z=0:0,1,0,y=0:360,91,0,x=0:575,144,0]
+                        ) as B,
+                        A.z,B.z,A.y,B.y,A.x,B.x
+                     )
+		     ,'/home/mrilee/nobackup/tmp/others/ccl-inputs-${region}-${t0}+${dtm1}.csv',-2,'csv+')
+"
+
+${EXE} gzip ${fname}
+
+# echo fname: ${fname}
+
+done

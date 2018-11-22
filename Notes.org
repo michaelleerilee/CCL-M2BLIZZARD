@@ -1,0 +1,196 @@
+
+
+* Original code from Hamid
+
+** /home/aoloso/DEREChOS/MERRA2_visibility/
+
+*** matsuzawa's calculation of visibility
+uses M2T1NXFLX, M2T1NXSLV, M2CONXASM
+stores to MERRA2_visib_with_land_landice
+**** /home/aoloso/DEREChOS/MERRA2_visibility/matsuzawa
+#!/bin/bash -x
+
+time iquery -anq "store 
+ (
+         apply 
+         (
+            apply 
+            (
+               apply   
+               (
+                  apply 
+                  (
+                     cross_join 
+                     (
+                        join 
+                        ( 
+                            project 
+                            (
+                               M2T1NXFLX, precsno, prectot
+                            ),
+                            project 
+                            (
+                               M2T1NXSLV, u10m, v10m, u2m, v2m
+                            )
+                        ) as A,
+                        redimension 
+                        ( 
+                           M2C0NXASM, 
+                           <frland:float null, frlandice:float null>[z=0:0,1,0,y=0:360,91,0,x=0:575,144,0]
+                        ) as B,
+                        A.z,B.z,A.y,B.y,A.x,B.x
+                     ),
+                     mask_all_snow, iif (precsno > 0.  AND precsno = prectot
+                     AND (frland+frlandice) >= 0.5 , int8(1) , null),
+                     s10m, sqrt( (u10m*u10m) + (v10m * v10m) ),
+                     s2m,  sqrt( (u2m*u2m) + (v2m * v2m) )
+                  ),
+                  fact1 , pow ( (2.0/0.15), (-0.35/(0.4*0.036*s10m) ) ),
+                  fact2 , 30.0 - (precsno*1000./1.2),
+                  fact3 , precsno*1000./1.2
+               ),
+               visibility, 707.95*(pow(s2m*(fact3+(fact2*fact1)),-0.773 ))*mask_all_snow
+            ),
+            extinction_coeff, 3.912/visibility,
+            mask_visib_800, iif(visibility <=  800, int8(1), null),
+            mask_visib_1000, iif(visibility <=  1000, int8(1), null),
+            mask_visib_1200, iif(visibility <=  1200, int8(1), null)
+         ),
+    MERRA2_visib_with_land_landice
+ )"
+
+
+*** ccl in time
+uses MERRA2_visib_with_land_landice
+stores to MERRA2_visib_1000m_ccl_Time_land_landice
+**** /home/aoloso/DEREChOS/MERRA2_visibility/ccl_1000_first_pass
+#!/bin/bash -x
+
+time iquery -anq "store 
+ (
+         ccl 
+         (
+            filter 
+            (
+               project   
+               (
+                  MERRA2_visib_with_land_landice, mask_visib_1000 
+               ),
+               mask_visib_1000 > 0
+            ),
+            conTime
+          ),
+    MERRA2_visib_1000m_ccl_Time_land_landice
+ )"
+
+
+*** ccl in space using 8-way connectivity
+uses MERRA2_visib_1000m_ccl_Time_land_landice
+stores to MERRA2_visib_1000m_ccl_gt2_land_landice
+**** /home/aoloso/DEREChOS/MERRA2_visibility/ccl_1000_second_pass
+#!/bin/bash -x
+
+time iquery -anq "store
+    (
+    ccl
+    (
+    redimension
+    (
+    cross_join
+    (
+     redimension
+     (
+      apply
+      (
+        MERRA2_visib_1000m_ccl_Time_land_landice, ccl_dim, ccl
+      ),
+      <ccl:int64>[t=0:*,720,0,z=0:0,1,0,y=0:360,91,0,x=0:575,144,0,ccl_dim=0:*,64,0]
+     ) as A, 
+     filter
+     (
+         aggregate
+         (
+            redimension
+            (
+                apply
+                (
+                  MERRA2_visib_1000m_ccl_Time_land_landice, ccl_dim, ccl
+                ),
+                <ccl:int64>[t=0:*,720,0,z=0:0,1,0,y=0:360,91,0,x=0:575,144,0,ccl_dim=0:*,64,0]
+             ),
+             count(ccl) as cclCount, ccl_dim
+          ),
+         cclCount > 2
+     ) as B, 
+       A.ccl_dim, B.ccl_dim
+    ),
+    <ccl:int64>[t=0:*,720,0,z=0:0,1,0,y=0:360,91,0,x=0:575,144,0]
+    ),
+    con8, 4
+    ),
+    MERRA2_visib_1000m_ccl_gt2_land_landice
+    )"
+
+
+
+** project and save
+
+iquery -naq "save(between(MERRA2_visib_with_land_landice,9000,0,0,0,9000,0,0,0),'/home/mrilee/nobackup/tmp/others/tmp.csv',-2,'csv+')"
+
+iquery -naq "save(between(MERRA2_visib_with_land_landice,122736,0,0,0,122736+23,0,0,0),'/home/mrilee/nobackup/tmp/others/tmp.csv',-2,'csv+')"
+
+
+
+t0=122736
+t1=122736+23
+
+z0=0
+z1=0
+y0=0
+y1=0
+x0=0
+x1=0
+
+z0=0
+z1=0
+y0=0
+y1=360
+x0=0
+x1=575
+
+# z0=
+# z1=
+# y0=
+# y1=
+# x0=
+# x1=
+
+iquery -naq "save(between(MERRA2_visib_with_land_landice,${t0},0,0,0,${t1},0,0,0),'/home/mrilee/nobackup/tmp/others/tmp.csv',-2,'csv+')"
+
+
+*** ./date_to_idx.py 1993 1 1
+122736
+
+*** ./date_to_idx.py 1993 12 31
+131472
+
+*** MERRA2_visib_with_land_landice
+'MERRA2_visib_with_land_landice<precsno:float NULL DEFAULT null,prectot:float NULL DEFAULT null
+,u10m:float NULL DEFAULT null,v10m:float NULL DEFAULT null,u2m:float NULL DEFAULT null,v2m:float NULL DEFAULT null
+,frland:float NULL DEFAULT null,frlandice:float NULL DEFAULT null,mask_all_snow:int8 NULL DEFAULT null
+,s10m:float NULL DEFAULT null,s2m:float NULL DEFAULT null
+,fact1:double NULL DEFAULT null,fact2:double NULL DEFAULT null,fact3:double NULL DEFAULT null
+,visibility:double NULL DEFAULT null,extinction_coeff:double NULL DEFAULT null
+,mask_visib_800:int8 NULL DEFAULT null,mask_visib_1000:int8 NULL DEFAULT null,mask_visib_1200:int8 NULL DEFAULT null>
+[t=0:*,720,0,z=0:0,1,0,y=0:360,91,0,x=0:575,144,0]
+
+* Save MERRA2 geometry
+
+# /home/mrilee/nobackup/tmp/others/
+
+
+iquery -naq "save(area_merra2,'/home/mrilee/nobackup/tmp/others/area_merra2.csv',-2,'csv+');"
+iquery -naq "save(lat_merra2, '/home/mrilee/nobackup/tmp/others/lat_merra2.csv',-2,'csv+');"
+iquery -naq "save(lon_merra2, '/home/mrilee/nobackup/tmp/others/lon_merra2.csv',-2,'csv+');"
+
+

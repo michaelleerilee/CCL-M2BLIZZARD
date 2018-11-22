@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# duration=hour
+duration=day
+# duration=fortnite
+# region=origin
+region=globe
+
+if [ ${duration} == "hour" ]; then
+    # 1993 1 1
+    t0=122736
+    dtm1=0
+    t1=122736+${dtm1}
+elif [ ${duration} == "day" ]; then
+    # 1993 1 1
+    t0=122736
+    dtm1=23    
+    t1=122736+${dtm1}
+elif [ ${duration} == "fortnite" ]; then
+    # 1993 1 1
+    t0=122736
+    # dtm1=14*24-1
+    dtm1=335
+    t1=122736+${dtm1}
+fi
+
+if [ ${region} == "origin" ]; then
+z0=0
+z1=0
+y0=0
+y1=0
+x0=0
+x1=0
+elif [ ${region} == "globe" ]; then
+z0=0
+z1=0
+y0=0
+y1=360
+x0=0
+x1=575
+fi
+
+# z0=
+# z1=
+# y0=
+# y1=
+# x0=
+# x1=
+
+fname=/home/mrilee/nobackup/tmp/others/tmp-${region}-${t0}+${dtm1}.csv
+
+# EXE=echo
+EXE=time
+
+${EXE} iquery -naq "save(between(MERRA2_visib_with_land_landice,${t0},${z0},${y0},${x0},${t1},${z1},${y1},${x1}),'/home/mrilee/nobackup/tmp/others/tmp-${region}-${t0}+${dtm1}.csv',-2,'csv+')"
+${EXE} gzip ${fname}
+

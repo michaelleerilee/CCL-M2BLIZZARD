@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# duration=day
+duration=fortnite
+# region=origin
+region=globe
+
+# 1/1/93 .. 12/31/93
+#
+dt=336
+dtm1=335
+for s in `seq 122736 ${dt} 131472`; do 
+
+if [ ${duration} == "fortnite" ]; then
+    # # 1993 1 1
+    # t0=122736
+    # # dt=14*24-1
+    # dt=335
+    # t1=122736+${dt}
+    t0=${s}
+    t1=${s}+${dtm1}
+fi
+
+if [ ${region} == "origin" ]; then
+z0=0
+z1=0
+y0=0
+y1=0
+x0=0
+x1=0
+elif [ ${region} == "globe" ]; then
+z0=0
+z1=0
+y0=0
+y1=360
+x0=0
+x1=575
+fi
+
+# z0=
+# z1=
+# y0=
+# y1=
+# x0=
+# x1=
+
+fname=/home/mrilee/nobackup/tmp/others/tmp-${region}-${t0}+${dt}.csv
+
+EXE=echo
+
+${EXE} iquery -naq "save(between(MERRA2_visib_with_land_landice,${t0},${z0},${y0},${x0},${t1},${z1},${y1},${x1}),'/home/mrilee/nobackup/tmp/others/tmp-${region}-${t0}+${dt}.csv',-2,'csv+')"
+${EXE gzip ${fname}
+
+echo fname: ${fname}
+
+done
