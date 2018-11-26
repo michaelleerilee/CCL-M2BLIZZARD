@@ -7,13 +7,16 @@ from ccl_marker_stack    import ccl_dask
 base       = '/home/mrilee/nobackup/tmp/others/'
 
 fnames = None
+# Test case 1.
 if False:
     fnames     = ['ccl-inputs-globe-122736+23.csv.gz']
 
+# Test case 2.
 if False:
     fnames     = ['ccl-inputs-globe-122736+23.csv.gz'
                   ,'ccl-inputs-globe-122760+23.csv.gz']
-    
+
+# Test case 3.
 if True:
     fnames     = ['ccl-inputs-globe-122736+23.csv.gz'
                   ,'ccl-inputs-globe-122760+23.csv.gz'
@@ -51,7 +54,8 @@ if False:
     
 
 if True:
-    ccl_dask_object.make_stacks(thresh_mnmx)
+    ccl_dask_object.make_blizzard_stacks(thresh_mnmx)
+    # ccl_dask_object.make_stacks(thresh_mnmx)
     ccl_dask_object.shift_labels()
     ccl_dask_object.make_translations()
     ccl_dask_object.apply_translations()
@@ -64,7 +68,10 @@ if True:
     np.set_printoptions(threshold=5000,linewidth=600)
     print 'ccl_dask_object.ccl_results[0].m_results_translated[0][0:60,0:60]\n'\
         ,ccl_dask_object.ccl_results[0].m_results_translated[0][0:60,0:60]
-    np.set_printoptions(threshold=1000,linewidth=75)    
+    np.set_printoptions(threshold=1000,linewidth=75)
+    # For Test case 3.
+    #   Without the 3-hour blizzard masking, we get 1214 showing in the 60x60 view.
+    #   With the 3-hour masking, we get 1203.
     
 ccl_dask_object.close()
 
@@ -72,7 +79,6 @@ ccl_dask_object.close()
 # Note, if we have to do the 3-hour blizzard calculation w/o CCL, then we can monkey with the load_data_segments to
 # have files loaded onto separate cluster nodes, like ghost cells. Alternatively, we can Dask it by client.submitting
 # tasks with dependencies on those two adjacent futures.
-
 
 
 
