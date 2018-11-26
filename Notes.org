@@ -1,4 +1,17 @@
 
+* Notes
+
+** 2018-1121
+
+DASK runs seem to be performing well. Matching serial runs on real
+data. Parallelism seems pretty good at localhost:8787/status.
+
+load_for_ccl_inputs.py loads the csv data and produces visibilities
+ccl_dask_blizzard.py drives the dask-based analysis
+
+TODO Implement the 3-hour blizzard criterion
+TODO Implement the netCDF read
+
 
 * Original code from Hamid
 
