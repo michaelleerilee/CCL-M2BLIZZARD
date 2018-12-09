@@ -11,13 +11,32 @@ M2T1NXFLX_base,M2T1NXFLX_datafiles\
 
 nfiles = len(M2T1NXFLX_datafiles)
 
-# Test case 1.
-findex_ranges=[\
-               [0],\
-               [1] \
-               ]
+# run_case = 'TestCase1'
+run_case = 'TestCase2'
+run_case_set = False
+if 'run_results' not in locals() and 'run_results' not in globals():
+    run_results = {}
 
-# quit()
+# Test case 1.
+if run_case == 'TestCase1':
+    run_case_set = True
+    findex_ranges=[\
+                   [0],\
+                   [1] \
+    ]
+# 89
+    
+# Test case 2.
+if run_case == 'TestCase2':
+    run_case_set = True
+    findex_ranges=[\
+                   [0,1]\
+    ]
+# 89
+    
+if run_case_set is False:
+    print 'run_case is not set, quitting!'
+    quit()
 
 def loader(fidx_range,argList):
     return input_array(fidx_range).visibility_i[:]
@@ -30,7 +49,7 @@ def loader(fidx_range,argList):
 # For extinction, 1/visibility.
 thresh_mnmx = (1.0e-3,1.0)
 
-# The calculation
+# Calculation: Load data
 if True:
     ccl_dask_object = ccl_dask()
     ccl_dask_object.load_data_segments_with_loader(loader,findex_ranges,[()])
@@ -42,7 +61,7 @@ if False:
     ccl_dask_object.data_segs[0].result()
     print 'ccl_dask_object.data_segs',ccl_dask_object.data_segs
     
-
+# Calculations
 if True:
     ccl_dask_object.make_blizzard_stacks(thresh_mnmx)
     # ccl_dask_object.make_stacks(thresh_mnmx)
@@ -50,21 +69,73 @@ if True:
     ccl_dask_object.make_translations()
     ccl_dask_object.apply_translations()
 
+    # serial collect
+    ccl_dask_object.collect_all_results()
+
+    # Simplify the labels so they are sequential without gaps.
+    print 'simplify_labels'
+    ccl_dask_object.simplify_labels()
+
+    # serial collect
+    print 'collect_simplified_results'
+    ccl_dask_object.collect_simplified_results()
+
+    print 'ccl_dask calculation done'
+
+# Diagnostics looking at the results of the data load
 if False:
     print 'ccl_dask_object.data_segs[0].results()[0]\n'\
         ,ccl_dask_object.data_segs[0].result()[0]
 
 if True:
+    iseg = 0
+    isl = 0
+    rc  = 60
+    r0  = 0
+    c0  = 0
+    r1  = r0 + rc
+    c1  = c0 + rc
+
+# Original default
+if False:
+    iseg = 0
+    isl = 0
+    rc  = 60
+    r0  = 0
+    c0  = 0
+    r1  = r0 + rc
+    c1  = c0 + rc
+
+# Diagnostics look at the results with the working labels
+if True:
     np.set_printoptions(threshold=5000,linewidth=600)
-    print 'ccl_dask_object.ccl_results[0].m_results_translated[0][0:60,0:60]\n'\
-        ,ccl_dask_object.ccl_results[0].m_results_translated[0][0:60,0:60]
+    print 'ccl_dask_object len(ccl_results): ',len(ccl_dask_object.ccl_results)
+    print 'ccl_dask_object.ccl_results[iseg].m_results_translated[isl][r0:r1,c0:c1]'\
+        ,isl,r0,r1,c0,c1,'\n'\
+        ,ccl_dask_object.ccl_results[iseg].m_results_translated[isl][r0:r1,c0:c1]
     np.set_printoptions(threshold=1000,linewidth=75)
     # For Test case 3.
     #   Without the 3-hour blizzard masking, we get 1214 showing in the 60x60 view.
     #   With the 3-hour masking, we get 1203.
-    
-ccl_dask_object.close()
 
+# Diagnostics for simplified labels
+# object.ccl_results_simplified_labels has the results from the futures in ooooooooooooooobject.ccl_stacks_simplified_b
+if True:
+    np.set_printoptions(threshold=5000,linewidth=600)
+    print 'ccl_dask_object.ccl_results_simplified_labels[iseg].m_results_simple[isl][r0:r1,c0:c1]'\
+        ,isl,r0,r1,c0,c1,'\n'\
+        ,ccl_dask_object.ccl_results_simplified_labels[iseg].m_results_simple[isl][r0:r1,c0:c1]
+    np.set_printoptions(threshold=1000,linewidth=75)
+
+if False:
+    ccl_dask_object.diagnose_parallel_simplify_0()
+
+if True:    
+    ccl_dask_object.close()
+
+print 'ccl_dask_blizzard_nc4 completing '+run_case
+run_results[run_case] = ccl_dask_object
+print 'done'
 
 # Note, if we have to do the 3-hour blizzard calculation w/o CCL, then we can monkey with the load_data_segments to
 # have files loaded onto separate cluster nodes, like ghost cells. Alternatively, we can Dask it by client.submitting
