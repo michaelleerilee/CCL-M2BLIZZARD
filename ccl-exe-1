@@ -1,0 +1,27 @@
+#!/bin/bash
+
+. ~/.bashrc
+
+echo "hostname   " \'`hostname`\'
+echo "DASK_NODES " \'${DASK_NODES}\'
+
+if [ x${DASK_NODES} != x ]; then
+
+dask-ssh --hostfile ${DASK_NODES} &
+DASK_SSH_PID=$!
+
+sleep 15
+
+cd /home/mrilee/git/CCL-M2BLIZZARD/
+# python ./ccl_dask_blizzard_nc4.py
+./ccl_dask_blizzard_nc4.py
+
+echo killing DASK_SSH_PID=${DASK_SSH_PID}
+kill ${DASK_SSH_PID}
+
+else
+
+echo No DASK_NODES found. Exiting.
+
+fi
+

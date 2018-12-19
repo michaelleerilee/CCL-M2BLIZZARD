@@ -1,6 +1,11 @@
 
 * Notes
 
+** 2018-1211
+
+*** Year1 ran out of memory on one node
+*** 8 4-ranges use about 17G ram, there's about 128G on a node (and 20 cores)
+
 ** 2018-1121
 
 DASK runs seem to be performing well. Matching serial runs on real
