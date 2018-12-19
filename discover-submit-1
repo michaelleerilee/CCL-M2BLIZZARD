@@ -1,3 +1,38 @@
 #!/bin/bash
 
-sbatch --nodes=1 --mem-per-cpu=2048 ./ccl-exe-1
+MEM_PER_CPU="2048"
+NODES="1"
+PASS=()
+POSITIONAL=()
+RUN_CASE=""
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    # echo key ${key}
+    case ${key} in
+	-n|--nodes)
+	    NODES="$2"
+	    shift; shift
+	    ;;
+	-m|--mem-per-cpu)
+	    MEM_PER_CPU="$2"
+	    shift; shift;
+	    ;;
+	-r|--run_case)
+	    RUN_CASE="-r $2"
+	    shift; shift;
+	    ;;
+	-p|--pass)
+	    PASS+=("$2")
+	    shift; shift;
+	    ;;
+	*)
+	    # echo 1 "$1"
+	    POSITIONAL+="$1 "
+	    shift
+	    ;;
+    esac
+    # echo POSITIONAL ${POSITIONAL}
+done
+# set -- "${POSITIONAL[@]}"
+
+sbatch ${POSITIONAL} --nodes=${NODES} --mem-per-cpu=${MEM_PER_CPU} ./ccl-exe-1 ${PASS} ${RUN_CASE}

@@ -4,6 +4,9 @@
 
 echo "hostname   " \'`hostname`\'
 echo "DASK_NODES " \'${DASK_NODES}\'
+echo "args       " \'$*\'
+
+# exit
 
 if [ x${DASK_NODES} != x ]; then
 
@@ -14,7 +17,7 @@ sleep 15
 
 cd /home/mrilee/git/CCL-M2BLIZZARD/
 # python ./ccl_dask_blizzard_nc4.py
-./ccl_dask_blizzard_nc4.py
+./ccl_dask_blizzard_nc4.py $*
 
 echo killing DASK_SSH_PID=${DASK_SSH_PID}
 kill ${DASK_SSH_PID}
