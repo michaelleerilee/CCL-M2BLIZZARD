@@ -4,27 +4,40 @@
 
 echo "hostname   " \'`hostname`\'
 echo "DASK_NODES " \'${DASK_NODES}\'
+echo "DASK_NODES:"
+cat  ${DASK_NODES}
+echo SLURM_JOB_NODELIST: ${SLURM_JOB_NODELIST}
 echo "args       " \'$*\'
 
 # exit
 
 if [ x${DASK_NODES} != x ]; then
 
-dask-ssh --hostfile ${DASK_NODES} &
-DASK_SSH_PID=$!
+    dask-ssh \
+	--hostfile ${DASK_NODES}\
+	--remote-python /gpfsm/dnb32/mrilee/python-projects/dask-virtual-environment/bin/python &
 
-sleep 15
-
-cd /home/mrilee/git/CCL-M2BLIZZARD/
-# python ./ccl_dask_blizzard_nc4.py
-./ccl_dask_blizzard_nc4.py $*
-
-echo killing DASK_SSH_PID=${DASK_SSH_PID}
-kill ${DASK_SSH_PID}
-
+    DASK_SSH_PID=$!
+	
+    # sleep 15
+    sleep 60
+    
+    cd /home/mrilee/git/CCL-M2BLIZZARD/
+    OUTPUT_DIR="/home/mrilee/nobackup/dask-ccl/output/${SLURM_JOB_ID}/"
+    echo Setting OUTPUT_DIR to \'${OUTPUT_DIR}\'
+    mkdir ${OUTPUT_DIR}
+    
+    # python ./ccl_dask_blizzard_nc4.py
+    ./ccl_dask_blizzard_nc4.py $* -o ${OUTPUT_DIR}
+    
+    gzip ${OUTPUT_DIR}*.json
+    
+    echo killing DASK_SSH_PID=${DASK_SSH_PID}
+    kill ${DASK_SSH_PID}
+    
 else
-
-echo No DASK_NODES found. Exiting.
-
+    
+    echo No DASK_NODES found. Exiting.
+    
 fi
 

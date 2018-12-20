@@ -113,6 +113,7 @@ if run_case is not None:
                        ,[4,5]\
                        ,[6,7]\
         ]
+
     if run_case == 'Year1':
         run_case_set = True
         # By fours, except the last.
@@ -120,12 +121,12 @@ if run_case is not None:
     
     if run_case == 'Year1a':
         run_case_set = True
-        # By fours, except the last.
+        # By fours.
         findex_ranges=[range(4*i,4*i+4) for i in range(4)]
     
-    if run_case == 'Year1b':
+    if run_case == 'Year1b' or run_case == 'Month1':
         run_case_set = True
-        # By fours, except the last.
+        # By fours.
         findex_ranges=[range(4*i,4*i+4) for i in range(8)]    
         
 if run_case_set is False:
@@ -200,12 +201,19 @@ if True:
     ccl_dask_object.simplify_labels()
 
     # serial collect
-    print 'collect_simplified_results'
-    ccl_dask_object.collect_simplified_results()
+    serial_collect = False
+    if serial_collect:
+        print 'collect_simplified_results'
+        ccl_dask_object.collect_simplified_results()
 
+    ccl_dask_object.wait_on_results()
+    
     time_measurements['time_ccl_simplified_results_1'] = time()
 
     # save to disk
+    if True:
+        print 'Output the CCL labels.'
+        ccl_dask_object.save_simplified_results(output_dirpath)
     
     time_measurements['time_ccl_simplified_results_2'] = time()
     
@@ -249,16 +257,18 @@ if True:
 
 # Diagnostics for simplified labels
 # object.ccl_results_simplified_labels has the results from the futures in ooooooooooooooobject.ccl_stacks_simplified_b
+# serial collect?
 if True:
     np.set_printoptions(threshold=5000,linewidth=600)
-    print 'ccl_dask_object.ccl_results_simplified_labels[iseg].m_results_simple[isl][r0:r1,c0:c1]'\
+    print 'ccl_dask_object.ccl_stacks_simplified_b[iseg].result().m_results_simple[isl][r0:r1,c0:c1]'\
         ,isl,r0,r1,c0,c1,'\n'\
-        ,ccl_dask_object.ccl_results_simplified_labels[iseg].m_results_simple[isl][r0:r1,c0:c1]
+        ,ccl_dask_object.ccl_stacks_simplified_b[iseg].result().m_results_simple[isl][r0:r1,c0:c1]
     np.set_printoptions(threshold=1000,linewidth=75)
-
-if True:
-    print 'Output the CCL labels.'
-    ccl_dask_object.save_simplified_results(output_dirpath)
+    # print 'ccl_dask_object.ccl_results_simplified_labels[iseg].m_results_simple[isl][r0:r1,c0:c1]'\
+    #     ,isl,r0,r1,c0,c1,'\n'\
+    #     ,ccl_dask_object.ccl_results_simplified_labels[iseg].m_results_simple[isl][r0:r1,c0:c1]
+    # np.set_printoptions(threshold=1000,linewidth=75)
+    
 
 if False:
     ccl_dask_object.diagnose_parallel_simplify_0()

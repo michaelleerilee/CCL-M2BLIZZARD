@@ -1,0 +1,167 @@
+#!/usr/bin/env python
+
+import argparse
+from datetime import datetime
+import sys
+from time import time
+import unittest
+
+def process_brackets(line):
+    if line.count('[') > 1:
+        return "ERROR: can't parse (brackets) line = "+line
+    ret=''
+    names=[]
+    if '[' in line:
+        toks=line.split('[')
+        base=toks[0]
+        if ',' in toks[1]:
+            toks1 = toks[1].split(',')
+        else:
+            toks1 = [toks[1]]
+        for tok in toks1:
+            #print 'tok: ',tok
+            if '-' in tok:
+                if ']' in tok:
+                    l = tok.find(']')
+                    numbers=(tok[:l]).split('-')
+                else:
+                    numbers=tok.split('-')
+                # print 'base: ',base
+                # print 'numbers: ',numbers
+                # handle sequence
+                for n in range(int(numbers[0]),int(numbers[1])+1):
+                    names.append(base+str(n).zfill(3))
+                    ret+=names[-1]+'\n'
+                    # print 'names: ',names
+            else:
+                names.append(base+tok.replace(']',''))
+                ret+=names[-1]+'\n'
+    else:
+        # give up...
+        ret = 'ERROR expected a bracket in line = '+line
+    return ret
+
+def process(line):
+    ret='ERROR'
+    b0 = line.find('[')
+    c0 = line.find(',')
+    if 0 <= c0 and c0 < b0:
+      ret = '\n'.join(map(process,line.split(',',1)))
+    elif b0 >= 0:
+        b1 = line.find(']')
+        if b1 < 0:
+            # Add a brace back in if it was deleted by split.
+            line=line+']'
+            b1 = line.find(']')
+        # if line[b0:b1+1].find(',') > 0:
+        if False:
+            print 'line: ',line
+            return "ERROR: can't parse (comma) line = "+line
+        else:
+            bn = line.count(']')
+            if bn == 1 and len(line)-1 == line.find(']'):
+                return process_brackets(line)
+            else:
+                ret = ''
+                for t in line.split(']'):
+                    ret += process(t)
+    else:
+        if ',' in line:
+            ret=''
+            for s in line.split(','):
+                ret+=s+'\n'
+        else:
+            ret=line
+    # HACK
+    while ret.count('\n\n') > 0:
+        ret = ret.replace('\n\n','\n')
+    return ret
+                
+    # args = line.split(',')
+    # print 'args: ',args
+    # sys.stdout.write( str(date_[0])+','\
+    #     +str(date_[1])+','\
+    #     +str(date_[2])+','\
+    #     +str(int(args[0])%24)+','\
+    #     +str(int(args[0]))+','\
+    #     +str(args[2])+','\
+    #     +str(args[3])+','\
+    #     +str(args[4]))
+    # sys.stdout.flush()
+
+
+class Tests(unittest.TestCase):
+
+    def test_bracket_double_node2(self):
+        self.assertEqual('borga001\nborga003\n',process_brackets('borga[001,003]'))
+        return
+
+    def test_bracket_span_node2(self):
+        self.assertEqual('borga001\nborga002\nborga003\n',process_brackets('borga[001-003]'))
+        return
+
+    def test_bracket_complex1(self):
+        self.assertEqual('borg01y066\nborg01y067\nborg01y068\nborg01y077\n',process_brackets('borg01y[066-068,077]'))
+        return
+    
+    def test_single_node(self):
+        self.assertEqual('borga001',process('borga001'))
+        return
+
+    def test_double_node1(self):
+        self.assertEqual('borga001\nborga003\n',process('borga001,borga003'))
+        return
+
+    def test_double_node2(self):
+        self.assertEqual('borga001\nborga003\n',process('borga[001,003]'))
+        return
+
+    def test_double_node3(self):
+        self.assertEqual('borga001\nborga002\n',process('borga[001-002]'))
+        return
+
+    def test_node_span(self):
+        self.assertEqual('borga001\nborga002\nborga003\nborga004\nborga005\n',process('borga[001-005]'))
+        return
+    
+    def test_complex1(self):
+        self.assertEqual(\
+                         'borgr187\nborgr188\nborgs045\nborgt100\n'\
+                         ,process('borgr[187-188],borgs045,borgt100'))
+        return
+    def test_complex2(self):
+        self.assertEqual(\
+                         'borgr049\nborgs005\nborgs130\nborgt092\n'\
+                         ,process('borgr049,borgs[005,130],borgt092'))
+        return
+
+    def test_complex1(self):
+        self.assertEqual(\
+                         'borgq161\nborgq166\nborgq169\nborgq170\n'\
+                         ,process('borgq[161,166,169-170]'))
+        return
+     
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Parse SLURM_JOB_NODELIST into a dask-ssh hostfile.')
+    parser.add_argument('-t','--test'\
+                        ,dest='test_flag'\
+                        ,action='store_true'\
+                        ,required=False\
+                        ,help='Run internal test cases')
+    parser.set_defaults(test_flag=False)
+    args=parser.parse_args()
+
+    if args.test_flag:
+        # https://stackoverflow.com/questions/20265522/argparse-and-unittest-python
+        runner = unittest.TextTestRunner()
+        itersuite = unittest.TestLoader().loadTestsFromTestCase(Tests)
+        runner.run(itersuite)
+        # unittest.main()
+    else:
+        for line in sys.stdin:
+            output = process(line)
+            sys.stdout.write(output)
+            sys.stdout.flush()
+            if "ERROR" in output:
+                exit()
+    
