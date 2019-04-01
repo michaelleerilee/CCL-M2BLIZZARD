@@ -5,6 +5,7 @@ NODES="1"
 PASS=()
 POSITIONAL=()
 RUN_CASE=""
+ECHO=""
 while [[ $# -gt 0 ]]; do
     key="$1"
     # echo key ${key}
@@ -25,6 +26,15 @@ while [[ $# -gt 0 ]]; do
 	    PASS+=("$2")
 	    shift; shift;
 	    ;;
+	--dryrun)
+	    ECHO="echo"
+	    shift;
+	    ;;
+	--help)
+	    echo "EXAMPLE USAGE -- Review $0 for more information."
+	    echo "./discover-submit-1 -r Month1 -n 8"
+	    exit
+	    ;;
 	*)
 	    # echo 1 "$1"
 	    POSITIONAL+="$1 "
@@ -35,4 +45,4 @@ while [[ $# -gt 0 ]]; do
 done
 # set -- "${POSITIONAL[@]}"
 
-sbatch ${POSITIONAL} --nodes=${NODES} --mem-per-cpu=${MEM_PER_CPU} ./ccl-exe-1 ${PASS} ${RUN_CASE}
+${ECHO} sbatch ${POSITIONAL} --nodes=${NODES} --mem-per-cpu=${MEM_PER_CPU} ./ccl-exe-1 ${PASS} ${RUN_CASE}

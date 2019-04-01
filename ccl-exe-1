@@ -1,8 +1,11 @@
 #!/bin/bash
 
+ulimit -a
+
 . ~/.bashrc
 
 echo "hostname   " \'`hostname`\'
+printenv PATH
 echo "DASK_NODES " \'${DASK_NODES}\'
 echo "DASK_NODES:"
 cat  ${DASK_NODES}
@@ -13,19 +16,55 @@ echo "args       " \'$*\'
 
 if [ x${DASK_NODES} != x ]; then
 
-    dask-ssh \
-	--hostfile ${DASK_NODES}\
-	--remote-python /gpfsm/dnb32/mrilee/python-projects/dask-virtual-environment/bin/python &
-
-    DASK_SSH_PID=$!
-	
-    # sleep 15
-    sleep 60
+# 	--log-directory /home/mrilee/dask-logs \
     
+#    dask-ssh \
+#	--hostfile ${DASK_NODES} \
+#	--remote-python /gpfsm/dnb32/mrilee/python-projects/dask-virtual-environment/bin/python &
+#    DASK_SSH_PID=$!
+
+#    mpirun \
+#	--hostfile ${DASK_NODES} \
+#	-np ${SLURM_JOB_NUM_NODES} \
+#	-npernode 1 \
+#	/gpfsm/dnb32/mrilee/python-projects/dask-virtual-environment/bin/dask-mpi \
+    #	--scheduler-file /home/mrilee/dask-scheduler.json &
+
     cd /home/mrilee/git/CCL-M2BLIZZARD/
     OUTPUT_DIR="/home/mrilee/nobackup/dask-ccl/output/${SLURM_JOB_ID}/"
     echo Setting OUTPUT_DIR to \'${OUTPUT_DIR}\'
     mkdir ${OUTPUT_DIR}
+
+    export DASK_PORT=8786
+    
+    nohup dask-scheduler --port ${DASK_PORT} \
+	  > ${OUTPUT_DIR}/dask-scheduler.out \
+	  2> ${OUTPUT_DIR}/dask-scheduler.err \
+	  < /dev/null &
+    
+    DASK_SSH_PID=$!
+
+    export DASK_SCHEDULER_NODE=`head -1 ${DASK_NODES}`
+    for i in `cat  ${DASK_NODES}`; do
+	echo i: $i
+	ssh -q $i \
+	    "bash -c 'nohup dask-worker ${DASK_SCHEDULER_NODE}:${DASK_PORT} > ${OUTPUT_DIR}/dask-worker-$i.out 2> ${OUTPUT_DIR}/dask-worker-$i.err < /dev/null &'"
+
+	# ssh -q \
+	#     "bash -c 'nohup dask-worker \
+	#       ${DASK_SCHEDULER_NODE}:${DASK_PORT} \
+	#       > ${OUTPUT_DIR}/dask-worker-$i.out \
+	#       2> ${OUTPUT_DIR}/dask-worker-$i.err \
+	#       < /dev/null &'"
+    done
+    # sleep 15
+    sleep 60
+    # sleep 120
+    # sleep 300
+
+    # kill ${DASK_SSH_PID}
+    
+    # exit
     
     # python ./ccl_dask_blizzard_nc4.py
     ./ccl_dask_blizzard_nc4.py $* -o ${OUTPUT_DIR}

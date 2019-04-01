@@ -5,6 +5,8 @@
 import argparse
 import sys
 
+from dask.distributed import Client
+
 import numpy as np
 # from load_for_ccl_inputs import load_for_ccl_inputs
 from load_ncdf_for_matsuzawa import input_array, m2_datafiles
@@ -116,8 +118,11 @@ if run_case is not None:
 
     if run_case == 'Year1':
         run_case_set = True
-        # By fours, except the last.
-        findex_ranges=[range(4*i,4*i+4) for i in range(90)]+[range(360,365)]
+        findex_ranges=[range(46*i,46*i+46) for i in range(5)]+[range(45*i+230,45*i+230+45) for i in range(3)]
+
+#        findex_ranges=[range(13*i,13*i+13) for i in range(27)]+[range(351,365)]
+#        # By fours, except the last.
+#        findex_ranges=[range(4*i,4*i+4) for i in range(90)]+[range(360,365)]        
     
     if run_case == 'Year1a':
         run_case_set = True
@@ -127,7 +132,27 @@ if run_case is not None:
     if run_case == 'Year1b' or run_case == 'Month1':
         run_case_set = True
         # By fours.
-        findex_ranges=[range(4*i,4*i+4) for i in range(8)]    
+        findex_ranges=[range(4*i,4*i+4) for i in range(8)]
+
+    if run_case == 'Month1x16':
+        run_case_set = True
+        # By 2s.
+        findex_ranges=[range(2*i,2*i+2) for i in range(16)]
+
+    if run_case == 'Year1c' or run_case == 'Month2':
+        run_case_set = True
+        # By fours.
+        findex_ranges=[range(4*i,4*i+4) for i in range(16)]
+
+    if run_case == 'Month4x16':
+        run_case_set = True
+        # By fours.
+        findex_ranges=[range(8*i,8*i+8) for i in range(16)]
+
+    if run_case == 'Year1d':
+        run_case_set = True
+        findex_ranges=[range(23*i,23*i+23) for i in range(14)]+[range(322,346),range(346,365)]
+        # 20 minutes for 1 month on 8. So for 12 months on 16? 
         
 if run_case_set is False:
     print 'run_case is not set, quitting!'
@@ -157,6 +182,7 @@ thresh_mnmx = (1.0e-3,1.0)
 if True:
     print 'initialize ccl_dask_object'
     ccl_dask_object = ccl_dask()
+    # ccl_dask_object = ccl_dask(client=Client(scheduler_file='/home/mrilee/dask-scheduler.json'))
     print 'load data'
     ccl_dask_object.load_data_segments_with_loader(loader,findex_ranges,[()])
 

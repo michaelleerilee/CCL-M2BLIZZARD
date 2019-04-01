@@ -1,6 +1,594 @@
 
 * Notes
 
+** 2019-0329-0956-05 Perf. Analysis
+
+*** Job Resource Usage Summary for 28822294 - TestCase1
+TestCase1 
+cpus 1/28
+borgn199
+
+wall clock timings
+load                 15.5301249027
+blizz mask+load      15.5327727795
+ccl+blizz mask+load  35.2974209785
+blizz mask           0.0026478767395
+ccl                  19.7646481991
+done
+
+*** Job Resource Usage Summary for 28826684 - TestCase1 - failed during save_simplified_results
+*** Job Resource Usage Summary for 28834025 - TestCase1 - failed during save_simplified_results
+*** Job Resource Usage Summary for 28834066 - TestCase1 - failed during save_simplified_results
+*** Job Resource Usage Summary for 28834175 - TestCase1 - failed during save_simplified_results
+*** Job Resource Usage Summary for 28834487 - TestCase1 - failed during save_simplified_results
+*** Job Resource Usage Summary for 28834505 - TestCase1 
+
+ccl_dask_blizzard_nc4 completing TestCase1
+wall clock timings
+load                         16.3283951283
+blizz mask+load              16.3306860924
+ccl+blizz mask+load          35.6287331581
+ccl+blizz mask+load+output   35.6287350655
+blizz mask                   0.00229096412659
+ccl                          19.2980470657
+output                       1.90734863281e-06
+done
+
+Job Resource Usage Summary for 28834505 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 00:28:00
+  Memory Used		: 633320K
+  Virtual Memory Used	: 30553524K
+  Walltime Used		: 00:01:00
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 1 / 28
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borgr130
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 11:25:19 EST 2018
+
+
+*** Job Resource Usage Summary for 28834998 - TestCase1
+
+ccl_dask_blizzard_nc4 completing TestCase1
+wall clock timings
+load                         16.1788809299
+blizz mask+load              16.181566
+ccl+blizz mask+load          35.2034699917
+ccl+blizz mask+load+output   54.7393460274
+blizz mask                   0.00268507003784
+ccl                          19.0219039917
+output                       19.5358760357
+done
+killing DASK_SSH_PID=27396
+________________________________________________________________
+Job Resource Usage Summary for 28834998 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 00:38:16
+  Memory Used		: 407340K
+  Virtual Memory Used	: 30326080K
+  Walltime Used		: 00:01:22
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 1 / 28
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borgo180
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 12:03:00 EST 2018
+_____________________________________________________________________
+
+
+
+
+*** Job Resource Usage Summary for 28835262 - TestCase3-2
+
+ccl_dask_blizzard_nc4 completing TestCase3-2
+wall clock timings
+load                         24.4990520477
+blizz mask+load              24.5031099319
+ccl+blizz mask+load          89.9672050476
+ccl+blizz mask+load+output   126.797549963
+blizz mask                   0.00405788421631
+ccl                          65.4640951157
+output                       36.8303449154
+done
+killing DASK_SSH_PID=26604
+________________________________________________________________
+Job Resource Usage Summary for 28835262 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 00:41:04
+  Memory Used		: 910540K
+  Virtual Memory Used	: 30829020K
+  Walltime Used		: 00:02:34
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 1 / 16
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y198
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 12:19:52 EST 2018
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 28838333 - TestCase3-2
+ccl_dask_blizzard_nc4 completing TestCase3-2
+wall clock timings
+load                         28.3647661209
+blizz mask+load              28.3687081337
+ccl+blizz mask+load          93.0037469864
+ccl+blizz mask+load+output   132.038125038
+blizz mask                   0.00394201278687
+ccl                          64.6350388527
+output                       39.0343780518
+done
+killing DASK_SSH_PID=9749
+________________________________________________________________
+Job Resource Usage Summary for 28838333 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 01:25:52
+  Memory Used		: 575840K
+  Virtual Memory Used	: 38948836K
+  Walltime Used		: 00:02:41
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 2 / 32
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y098
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 16:55:00 EST 2018
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 28838380 - TestCase3-4
+ccl_dask_blizzard_nc4 completing TestCase3-4
+wall clock timings
+load                         24.457679987
+blizz mask+load              24.4612550735
+ccl+blizz mask+load          50.6670689583
+ccl+blizz mask+load+output   94.5413920879
+blizz mask                   0.00357508659363
+ccl                          26.2058138847
+output                       43.8743231297
+done
+killing DASK_SSH_PID=11199
+________________________________________________________________
+Job Resource Usage Summary for 28838380 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 02:48:00
+  Memory Used		: 
+  Virtual Memory Used	: 
+  Walltime Used		: 00:02:00
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 3 / 84
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borgr048
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 17:00:18 EST 2018
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 28841378 - TestCase4
+ccl_dask_blizzard_nc4 completing TestCase4
+wall clock timings
+load                         64.2613949776
+blizz mask+load              64.2668499947
+ccl+blizz mask+load          243.229839087
+ccl+blizz mask+load+output   519.809679031
+blizz mask                   0.00545501708984
+ccl                          178.962989092
+output                       276.579839945
+done
+killing DASK_SSH_PID=28394
+________________________________________________________________
+Job Resource Usage Summary for 28841378 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 10:34:40
+  Memory Used		: 1358004K
+  Virtual Memory Used	: 39730652K
+  Walltime Used		: 00:09:55
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 4 / 64
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y068
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 20:45:54 EST 2018
+_____________________________________________________________________
+
+
+
+*** Job Resource Usage Summary for 28841608 - TestCase4
+ccl_dask_blizzard_nc4 completing TestCase4
+wall clock timings
+load                         52.934374094
+blizz mask+load              52.9370589256
+ccl+blizz mask+load          174.409739017
+ccl+blizz mask+load+output   307.283049107
+blizz mask                   0.00268483161926
+ccl                          121.472680092
+output                       132.873310089
+done
+killing DASK_SSH_PID=22152
+________________________________________________________________
+Job Resource Usage Summary for 28841608 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 11:47:28
+  Memory Used		: 1358948K
+  Virtual Memory Used	: 56575192K
+  Walltime Used		: 00:06:19
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 4 / 112
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borgv097
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 21:07:18 EST 2018
+_____________________________________________________________________
+
+
+
+*** Job Resource Usage Summary for 28842670 - Month1
+
+ccl_dask_blizzard_nc4 completing Month1
+wall clock timings
+load                         208.780540943
+blizz mask+load              208.788012028
+ccl+blizz mask+load          1277.46694899
+ccl+blizz mask+load+output   1550.19269395
+blizz mask                   0.00747108459473
+ccl                          1068.67893696
+output                       272.725744963
+done
+killing DASK_SSH_PID=11686
+________________________________________________________________
+Job Resource Usage Summary for 28842670 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 4-05:17:52
+  Memory Used		: 5138900K
+  Virtual Memory Used	: 90138908K
+  Walltime Used		: 00:27:08
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 8 / 224
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borgo041
+  Charged to		: k3002
+
+  Job Stopped		: Wed Dec 19 22:58:47 EST 2018
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 30588155 - TestCase4
+ccl_dask_blizzard_nc4 completing TestCase4
+wall clock timings
+load                         58.1469471455
+blizz mask+load              58.1511340141
+ccl+blizz mask+load          193.902357101
+ccl+blizz mask+load+output   326.076820135
+blizz mask                   0.0041868686676
+ccl                          135.751223087
+output                       132.174463034
+done
+killing DASK_SSH_PID=22016
+________________________________________________________________
+Job Resource Usage Summary for 30588155 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 12:28:32
+  Memory Used		: 3712K
+  Virtual Memory Used	: 167060K
+  Walltime Used		: 00:06:41
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 4 / 112
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borgo043
+  Charged to		: k3002
+
+  Job Stopped		: Tue Mar 26 12:12:24 EDT 2019
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 30588326 - TestCase4
+ccl_dask_blizzard_nc4 completing TestCase4
+wall clock timings
+load                         60.2471179962
+blizz mask+load              60.2528030872
+ccl+blizz mask+load          229.129482985
+ccl+blizz mask+load+output   480.099810123
+blizz mask                   0.00568509101868
+ccl                          168.876679897
+output                       250.970327139
+done
+killing DASK_SSH_PID=21155
+________________________________________________________________
+Job Resource Usage Summary for 30588326 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 09:52:00
+  Memory Used		: 1356004K
+  Virtual Memory Used	: 39730988K
+  Walltime Used		: 00:09:15
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 4 / 64
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y067
+  Charged to		: k3002
+
+  Job Stopped		: Tue Mar 26 12:25:17 EDT 2019
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 30593749 - TestCase4
+ccl_dask_blizzard_nc4 completing TestCase4
+wall clock timings
+load                         61.3502838612
+blizz mask+load              61.3571078777
+ccl+blizz mask+load          237.331815958
+ccl+blizz mask+load+output   543.667965889
+blizz mask                   0.00682401657104
+ccl                          175.97470808
+output                       306.336149931
+done
+killing DASK_SSH_PID=19901
+________________________________________________________________
+Job Resource Usage Summary for 30593749 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 11:05:36
+  Memory Used		: 1405824K
+  Virtual Memory Used	: 14549412K
+  Walltime Used		: 00:10:24
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 4 / 64
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y087
+  Charged to		: k3002
+
+  Job Stopped		: Tue Mar 26 17:52:02 EDT 2019
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 30593969 - Month1
+ccl_dask_blizzard_nc4 completing Month1
+wall clock timings
+load                         229.280565023
+blizz mask+load              229.290256977
+ccl+blizz mask+load          2094.47736311
+ccl+blizz mask+load+output   3029.21924114
+blizz mask                   0.00969195365906
+ccl                          1865.18710613
+output                       934.741878033
+done
+killing DASK_SSH_PID=18661
+________________________________________________________________
+Job Resource Usage Summary for 30593969 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 4-14:58:08
+  Memory Used		: 5255332K
+  Virtual Memory Used	: 18397552K
+  Walltime Used		: 00:52:01
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 8 / 128
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y017
+  Charged to		: k3002
+
+  Job Stopped		: Tue Mar 26 19:34:06 EDT 2019
+_____________________________________________________________________
+
+
+*** Job Resource Usage Summary for 30608890 - Month1
+ccl_dask_blizzard_nc4 completing Month1
+wall clock timings
+load                         264.464572906
+blizz mask+load              264.474112988
+ccl+blizz mask+load          1150.04987884
+ccl+blizz mask+load+output   1630.63162804
+blizz mask                   0.00954008102417
+ccl                          885.575765848
+output                       480.581749201
+done
+killing DASK_SSH_PID=26648
+________________________________________________________________
+Job Resource Usage Summary for 30608890 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 2-13:05:04
+  Memory Used		: 5610156K
+  Virtual Memory Used	: 18755088K
+  Walltime Used		: 00:28:38
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 8 / 128
+  Walltime Requested	: 02:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y021
+  Charged to		: k3002
+
+  Job Stopped		: Wed Mar 27 09:23:30 EDT 2019
+_____________________________________________________________________
+
+
+
+
+
+*** Job Resource Usage Summary for 30621195 - Month2
+ccl_dask_blizzard_nc4 completing Month2
+wall clock timings
+load                         488.285109043
+blizz mask+load              488.303526878
+ccl+blizz mask+load          3454.54758692
+ccl+blizz mask+load+output   5150.20996809
+blizz mask                   0.0184178352356
+ccl                          2966.24406004
+output                       1695.66238117
+done
+killing DASK_SSH_PID=13234
+________________________________________________________________
+Job Resource Usage Summary for 30621195 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 15-13:20:00
+  Memory Used		: 10303912K
+  Virtual Memory Used	: 23510672K
+  Walltime Used		: 01:27:30
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 16 / 256
+  Walltime Requested	: 02:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01z221
+  Charged to		: k3002
+
+  Job Stopped		: Wed Mar 27 22:10:08 EDT 2019
+_____________________________________________________________________
+
+
+
+
+
+*** Job Resource Usage Summary for 30636375 - Month1
+ccl_dask_blizzard_nc4 completing Month1
+wall clock timings
+load                         0.0484778881073
+blizz mask+load              0.057559967041
+ccl+blizz mask+load          833.8207829
+ccl+blizz mask+load+output   961.301896095
+blizz mask                   0.00908207893372
+ccl                          833.763222933
+output                       127.481113195
+done
+killing DASK_SSH_PID=23337
+________________________________________________________________
+Job Resource Usage Summary for 30636375 
+Note: SLURM doesn't account for the exact same resource types as PBS.  
+      Also, you may see some values missing or zero, typically for 
+      very short jobs.  However, please do contact NCCS USG if you 
+      think the values below are in error.
+
+  CPU Time Used		: 1-13:07:12
+  Memory Used		: 3973408K
+  Virtual Memory Used	: 17117216K
+  Walltime Used		: 00:17:24
+
+  Memory Requested	: 2Gc (n=per node; c=per core)
+  CPUs Requested / Allocated : 8 / 128
+  Walltime Requested	: 01:00:00
+
+  Execution Queue	: compute
+  Head Node		: borg01y021
+  Charged to		: k3002
+
+  Job Stopped		: Thu Mar 28 08:10:02 EDT 2019
+_____________________________________________________________________
+
+
+
+
+** 2019-0326-0907-53 Usage
+
+*** Example of usage
+ ./discover-submit-1 -r Month1 -n 8
+
+
+*** 8 4-ranges use about 17G ram, there's about 128G on a node (and 20 cores)
+*** 91 4-ranges use about 200G
+-- (/ (* 91 17) 8) ~ 200G
+*** How many nodes for MAS runs - 28 nodes, 16 cores/node (SandyBridge).
+(/ 576 36)
+
+
+
 ** 2018-1211
 
 *** Year1 ran out of memory on one node
@@ -211,4 +799,15 @@ iquery -naq "save(area_merra2,'/home/mrilee/nobackup/tmp/others/area_merra2.csv'
 iquery -naq "save(lat_merra2, '/home/mrilee/nobackup/tmp/others/lat_merra2.csv',-2,'csv+');"
 iquery -naq "save(lon_merra2, '/home/mrilee/nobackup/tmp/others/lon_merra2.csv',-2,'csv+');"
 
+
+
+* MAS Description
+https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20150000368.pdf
+
+The total size of the MERRA/AS HDFS repository is approximately 480
+TB. MERRA/AS is running on a 36-node Dell cluster that has 576 Intel
+2.6 GHz SandyBridge cores, 1300 TB of raw storage, 1250 GB of RAM, and
+a 11.7 TF theoretical peak compute capacity.  Nodes communicate
+through a Fourteen Data Rate (FDR) Infiniband network having peak
+TCP/IP speeds in excess of 20 Gbps.
 

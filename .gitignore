@@ -4,5 +4,7 @@
 *.png
 *.pyc
 *.out
+*.lock
+*.dirlock
 dask-worker-space
 2018-1118-Shell-PrepareData-1
